@@ -23,12 +23,14 @@ echo "Test string from peer2" >> test/peer2/test.txt
 ```
 
 ### 2. p2p through CMD client
-Launching a client: `python client.py $known_peer_urls_file $working_dir $url`
-Supported Command in Client `fetch <filename>`, `hello <peer url>` and `exit`
+
+To launch a client, use `python client.py $known_peer_urls_file $working_dir $url`
+
+Supported commands in client: `fetch <filename>`, `hello <peer url>` and `exit`
 	
-General setup before starting server
+Additional step for testing setup
 ```bash
-echo "" > test/urls.txt
+touch test/urls.txt
 ```
 
 In the first console, start a client, which will in turn launch `peer1`
@@ -100,15 +102,12 @@ code, data = mypeer1.query('test.txt')
 mypeer1.fetch('test.txt', 'secret1')
 ```
 
-
-
-### Barebone
+## XML RPC Barebone
 Node1 | Node2
 --- | ---
->>> from SimpleXMLRPCServer import SimpleXMLRPCServer | >>> from xmlrpclib import ServerProxy
->>> s = SimpleXMLRPCServer(("", 4242)) | >>> s = ServerProxy('http://ikeblue3:4242')
->>> def twice(x): | >>> s.twice(4)
-...     return x*2 | 8
-... |  
->>> s.register_function(twice) |  
->>> s.serve_forever() |  
+`from SimpleXMLRPCServer import SimpleXMLRPCServer` | `from xmlrpclib import ServerProxy`
+`s = SimpleXMLRPCServer(("", 4242))` | `s = ServerProxy('http://ikeblue3:4242')`
+`def twice(x):` | `s.twice(4)`
+`....return x*2` | Result: `8`  
+`s.register_function(twice)` |  
+`s.serve_forever()` |  
