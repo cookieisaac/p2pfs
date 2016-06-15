@@ -3,7 +3,10 @@ import os #getcwd()
 import socket #gethostname()
 import sys
 import logging
-from cloghandler import ConcurrentRotatingFileHandler
+try:
+    from cloghandler import ConcurrentRotatingFileHandler
+except:
+    pass
 from xmlrpclib import ServerProxy, Fault
 from os.path import join, isfile, abspath
 from SimpleXMLRPCServer import SimpleXMLRPCServer
@@ -59,17 +62,21 @@ class Node:
                     LOG_LONG_FORMAT
         log_name = LOG_ROOT_NAME + '.' + str(socket.gethostname())
         log_file = os.path.join(log_dir, log_name)
-        rotate_handler = ConcurrentRotatingFileHandler(log_file, mode="a",
-           maxBytes=log_max_size, backupCount=log_max_rotate)
+        try:
+            rotate_handler = ConcurrentRotatingFileHandler(log_file, mode="a", maxBytes=log_max_size, backupCount=log_max_rotate)
+            log.addHandler(rotate_handler)
+            rotate_handler.setFormatter(formatter)
+        except:
+            logging.basicConfig(filename=log_file, level=logging.DEBUG, format='[%(asctime)s ][%(levelname)s][%(message)s]', datefmt='%m/%d/%Y %I:%M:%S %p')
+            pass
         formatter = logging.Formatter(log_format)
-        rotate_handler.setFormatter(formatter)
-        log.addHandler(rotate_handler)
+        
         log.setLevel(log_level)
         logging.info('Logging level has been set to DEBUG mode')
         logging.info('New node started with url <{}> serving directory <{}> with secret<{}>'.format(url, dirname, secret))
     
         #log_file = "server-node.log"
-        #logging.basicConfig(level=logging.DEBUG, format='[%(asctime)s ][%(levelname)s][%(message)s]', datefmt='%m/%d/%Y %I:%M:%S %p')
+        #logging.basicConfig(filename=log_file, level=logging.DEBUG, format='[%(asctime)s ][%(levelname)s][%(message)s]', datefmt='%m/%d/%Y %I:%M:%S %p')
 
         self.url = url
         self.dirname = dirname
