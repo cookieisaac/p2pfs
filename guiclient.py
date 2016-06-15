@@ -41,7 +41,6 @@ class Client(wx.App):
         bkg = wx.Panel(win)
         
         self.input = input = wx.TextCtrl(bkg)
-        
         submit = wx.Button(bkg, label="Fetch", size=(80, 25))
         submit.Bind(wx.EVT_BUTTON, self.fetchHandler)
         
@@ -49,11 +48,20 @@ class Client(wx.App):
         hbox.Add(input, proportion=1, flag=wx.ALL | wx.EXPAND, border=10)
         hbox.Add(submit, flag=wx.TOP | wx.BOTTOM | wx.RIGHT, border=10)
         
+        self.peer = peer = wx.TextCtrl(bkg)
+        add = wx.Button(bkg, label="Add a Peer", size=(80, 25))
+        add.Bind(wx.EVT_BUTTON, self.helloHandler)
+        
+        peerbox = wx.BoxSizer()
+        peerbox.Add(peer, proportion=1, flag=wx.ALL | wx.EXPAND, border=10)
+        peerbox.Add(add, flag=wx.TOP | wx.BOTTOM | wx.RIGHT, border=10)
+        
         self.files = files =wx.ListBox(bkg)
         self.updateList()
         
         vbox = wx.BoxSizer(wx.VERTICAL)
         vbox.Add(hbox, proportion=0, flag=wx.EXPAND)
+        vbox.Add(peerbox, proportion=0, flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, border=10)
         vbox.Add(files, proportion=1, flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, border=10)
         
         bkg.SetSizer(vbox)
@@ -72,6 +80,10 @@ class Client(wx.App):
             if f.faultCode != UNHANDLED:
                 raise
             print("Couldn't find the file %s" % query)
+            
+    def helloHandler(self, event):
+        url = self.peer.GetValue()
+        self.server.hello(url)
         
 def main():
     urlfile, directory, url = sys.argv[1:]

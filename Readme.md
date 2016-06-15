@@ -28,6 +28,9 @@ echo "Test string from peer2" >> test/peer2/test.txt
 python client.py test\urls.txt test\peer1 http://localhost:4242
 python client.py test\urls.txt test\peer2 http://localhost:4243
 ```
+You can fetch a file, or add a peer from GUI.
+A list of available file in current node will also be listed.
+See  ![alt tag](resource/screenshot.png)
 
 ### 2. p2p through CMD client
 
