@@ -21,6 +21,13 @@ mkdir -p test/peer1
 mkdir -p test/peer2
 echo "Test string from peer2" >> test/peer2/test.txt
 ```
+### 3. p2p through GUI client (Windows)
+```bash
+# Install wxPython on Windows and run the exe installer
+# Change to shared directory with `pushd \\samba.<domainname>\scratch\<unixpath>`
+python client.py test\urls.txt test\peer1 http://localhost:4242
+python client.py test\urls.txt test\peer2 http://localhost:4243
+```
 
 ### 2. p2p through CMD client
 
